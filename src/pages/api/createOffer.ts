@@ -1,13 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 // import sdk from '@api/opensea';
-import { ALCHEMY_API_KEY_MAINNET, OPENSEA_API, WALLET_PRIVATE_KEY } from "@/constant";
+import { ALCHEMY_API_KEY_MAINNET, OPENSEA_API } from "@/constant";
 import { Chain, OpenSeaSDK } from "opensea-js";
 import { AlchemyProvider, ethers } from "ethers";
 
-type Data = {
-  name: string;
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +16,7 @@ export default async function handler(
     let provider = new AlchemyProvider("homestead", ALCHEMY_API_KEY_MAINNET)
 
     const walletMainnet = new ethers.Wallet(
-      WALLET_PRIVATE_KEY as string,
+      req.body.privateKey as string,
       provider
     );
 
@@ -49,8 +46,9 @@ export default async function handler(
         console.log("Successfully created an offer with orderHash:", response.orderHash);
         res.status(200).json({ message: response.orderHash, success: true })
       } catch (error) {
-        console.error("Error in createOffer:", error.message);
+        // console.error("Error in createOffer:", error.message);
         res.status(405).json({ message: error.message, success: false })
+        throw new Error("Error in createOffer:" + error.message)
       }
     }
 

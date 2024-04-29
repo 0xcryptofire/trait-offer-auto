@@ -14,7 +14,7 @@ export interface IUserData {
   approach: number;
   trait: string;
   traitValue: string;
-  offerAmount: number;
+  offerAmount: string;
 }
 
 export interface ICollectionData {
@@ -56,7 +56,7 @@ export default function Home() {
     approach: 1,
     trait: "",
     traitValue: "",
-    offerAmount: 1,
+    offerAmount: "",
   });
   const [loading, setLoading] = useState(false);
   const [collectionData, setCollectionData] = useState({
@@ -122,9 +122,9 @@ export default function Home() {
   };
 
   const placeOffer = async () => {
-    // if (isEmpty(userData.privateKey)) {
-    //   return alert("Privatekey is required");
-    // }
+    if (isEmpty(userData.privateKey)) {
+      return alert("Privatekey is required");
+    }
 
     if (isEmpty(currentContract)) {
       return alert("Contract address is invaild");
@@ -147,7 +147,7 @@ export default function Home() {
 
     // for (const ass of assets) {
     const bodyContent = {
-      // privateKey: userData.privateKey,
+      privateKey: userData.privateKey,
       offerAmount: userData.offerAmount,
       tokenAddress: currentContract,
       assets,
@@ -164,7 +164,7 @@ export default function Home() {
       const data = await res.json();
       setAlertInfo({ isError: false, message: data.message });
     } catch (error) {
-      console.error("[Offer Error]", error);
+      // console.error("[Offer Error]", error);
       setAlertInfo({ isError: true, message: error.response.data.message });
       // throw new Error(error.message);
     }
@@ -207,7 +207,7 @@ export default function Home() {
         </p>
         <form className="w-full max-w-xl contents">
           <div className="flex flex-wrap -mx-3 mb-6  md:mb-0">
-            {/* <div className="w-full md:w-1/2 px-3">
+            <div className="w-full md:w-1/2 px-3">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-private-key"
@@ -223,8 +223,8 @@ export default function Home() {
                 value={userData.privateKey}
                 onChange={handleChange}
               />
-            </div> */}
-            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            </div>
+            <div className="w-full md:w-1/4 px-3 mb-6 md:mb-0">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-approach"
@@ -251,7 +251,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-1/2 px-3 mb-6">
+            <div className="w-full md:w-1/4 px-3 mb-6">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-contract-address"
