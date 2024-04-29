@@ -3,11 +3,9 @@ import { Abel } from "next/font/google";
 import { getContractAddress, isEmpty } from "@/utils";
 import { useState } from "react";
 import { NextPage } from "next";
-import dynamic from "next/dynamic";
-import { log } from "console";
 
-const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
-
+import JsonView from "react18-json-view";
+import "react18-json-view/src/style.css";
 const abel = Abel({ subsets: ["latin"], weight: ["400"] });
 
 export interface IUserData {
@@ -489,17 +487,9 @@ export default function Home() {
         <p className="text-2xl mb-6 text-black-700 mt-3 mb-6 font-bold">
           Check the Traits of NFTs
         </p>
-        <DynamicReactJson
-          style={{
-            padding: "1rem",
-            borderRadius: "0.75rem",
-            display: "block",
-            textAlign: "start",
-          }}
-          src={trait}
-          theme="solarized"
-          enableClipboard={false}
-        />
+        <div className="w-full bg-gray-200 border border-gray-200 p-6  flex justify-center rounded">
+          <JsonView src={trait} theme="vscode" />
+        </div>
 
         {/* bid state */}
         {/* <div className="w-full contents">
